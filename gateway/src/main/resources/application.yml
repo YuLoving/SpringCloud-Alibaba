@@ -1,0 +1,57 @@
+server:
+  port: 8092
+spring:
+  application:
+    name: gateway #配置微服务id
+  cloud:
+    nacos:
+      #nacos 注册中心
+      discovery:
+        username: nacos
+        password: nacos
+        server-addr: localhost:8848
+
+    #让gateway通过nacos实现自动路由转发
+    gateway:
+      discovery:
+        locator:
+          #locator.enabled是自动根据URL规则实现路由转发(true)     这是一个自动项，允许 Gateway 自动实现后端微服务路由转发， Gateway 工程启动后，在浏览器地址栏按下面格式访问后端服务。 http://网关IP:端口/微服务id/URI
+          enabled: false  #不再需要Gateway自动路由转发
+      #路由规则配置
+      routes:
+        #第一个路由配置，service-a路由规则
+        - id: service_a_route
+            #lb开头代表基于gateway的负载均衡策略选择实例
+            uri: lb://service-a
+            #谓词配置
+            predicates:
+              #Path路径谓词，代表用户端URI如果以/a开头便会转发到service-a实例
+              - path=/a/**
+              #After生效时间谓词，2020年10月15日后该路由才能在网关对外暴露
+              - After=2020-10-05T00:00:00.000+08:00[Asia/Shanghai]
+            #过滤器配置
+            filters:
+              #忽略掉第一层前缀进行转发
+              - StripPrefix=1
+              #为响应头附加X-Response=Blue  key=X-Response-Foo，Value=Bar。
+              - AddResponseHeader=X-Response,Blue
+
+
+        #第二个路由配置，service-b路由规则
+        - id: service_b_route
+           uri: lb://service-b
+           predicates:
+             - path=/b/**
+           filters:
+             - StripPrefix=1
+
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'  #对外暴露actuator所有监控指标，便于监控系统收集跟踪
+
+

@@ -1,0 +1,27 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: warehouse-service-dubbo #微服务id
+  cloud:
+    nacos:
+      #nacos注册地址
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+
+
+#dubbo与nacos的通信配置
+dubbo:
+  application:
+    name: warehouse-dubbo #provider在Nacos中的应用id
+  registry: #Provider与Nacos通信地址，与spring.cloud.nacos地址一致
+    address: nacos://localhost:8848
+  protocol:
+    name: dubbo  #通信协议名
+    port: 20880  #配置通信端口，默认为20880
+  #代表在 Dubbo 容器启动时自动扫描 cn.nj.warehouseservicedubbo 包下的接口与实现类，并将这些接口信息在Nacos 进行登记，因此 Dubbo 对外暴露的接口必须放在该包下。
+  scan:
+    base-packages: cn.nj.warehouseservicedubbo.serviceImpl

@@ -1,0 +1,21 @@
+server:
+  port: 8089
+spring:
+  application:
+    name: order-service-dubbo
+  cloud:
+    nacos:
+      ##nacos注册地址
+      discovery:
+        server-addr: localhost:8848
+        password: nacos
+        username: nacos
+
+
+#Dubbo 与 Nacos通信选项
+dubbo:
+  application:
+    name: warehouse-dubbo
+  registry:
+    address: nacos://localhost:8848
+  #因为 order-service 是消费者，因此不需要专门配置端口与 base-packages选项。

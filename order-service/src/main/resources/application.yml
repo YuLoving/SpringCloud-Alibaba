@@ -1,0 +1,48 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: order-service
+  cloud:
+    nacos:
+      #nacos 服务注册
+      discovery:
+        username: nacos
+        password: nacos
+        server-addr: localhost:8848
+        namespace: public
+
+
+
+# 开启默认的 OpenFeign 数据压缩功能
+#在 OpenFeign 中，默认并没有开启数据压缩功能。但如果你在服务间单次传递数据超过 1K 字节，强烈推荐开启数据压缩功能。默认 OpenFeign 使用 Gzip 方式压缩数据，对于大文本通常压缩后尺寸只相当于原始数据的 10%~30%，这会极大提高带宽利用率。
+#但有一种情况除外，如果应用属于计算密集型，CPU 负载长期超过 70%，因数据压缩、解压缩都需要 CPU 运算，开启数据压缩功能反而会给 CPU 增加额外负担，导致系统性能降低，这是不可取的。
+
+feign:
+  #启用 OkHttp
+  okhttp:
+    enabled: true
+  compression:
+    request:
+      # 开启请求数据的压缩功能
+      enabled: true
+      # 数据压缩下限 1024表示传输数据大于1024 才会进行数据压缩(最小压缩值标准)
+      min-request-size: 1024
+      # 压缩支持的MIME类型
+      mime-types: text/xml,application/xml, application/json
+    # 开启响应数据的压缩功能
+    response:
+      enabled: true
+
+
+
+
+
+#在 OpenFeign 使用时默认引用 Ribbon 实现客户端负载均衡。那如何设置 Ribbon 默认的负载均衡策略呢？
+#在 OpenFeign 环境下，配置方式其实与之前 Ribbon+RestTemplate 方案完全相同，只需在 application.yml 中调整微服务通信时使用的负载均衡类即可。
+warehouse-service: #服务提供者的微服务ID
+  ribbon:
+    #设置对应的负载均衡类
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+
