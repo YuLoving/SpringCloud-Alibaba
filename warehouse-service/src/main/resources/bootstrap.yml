@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: warehouse-service
+  profiles:
+    active: dev #环境名
+
+  cloud:
+    nacos:
+      #Nacos配置中心配置
+      config:
+        #文件扩展名
+        file-extension: yml
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+
+#开启debug日志，仅为学习时使用
+logging:
+  level:
+    root: debug

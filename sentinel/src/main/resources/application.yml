@@ -5,27 +5,56 @@ server:
 
 spring:
   application:
-    name: sentinel-sample #\u5E94\u7528\u540D&\u5FAE\u670D\u52A1id
+    name: sentinel-sample #应用名&微服务id
   cloud:
     sentinel:
-      #Sentinel Dashboard\u901A\u4FE1\u5730\u5740
+      #Sentinel Dashboard通信地址
       transport:
         dashboard: localhost:9100
-      #\u53D6\u6D88\u63A7\u5236\u53F0\u61D2\u52A0\u8F7D
+      #取消控制台懒加载
       eager: true
+      datasource:
+        #流控规则
+        flow: #数据源名称，可以自定义
+          nacos: #nacos配置中心
+          #Nacos内置配置中心，因此重用即可
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            dataId: ${spring.application.name}-flow-rules #定义流控规则data-id，完整名称为:sentinel-sample-flow-rules，在配置中心设置时data-id必须对应。
+            groupId: SAMPLE_GROUP #gourpId对应配置文件分组，对应配置中心groups项
+            rule-type: flow  #flow固定写死，说明这个配置是流控规则
+            #nacos通信的用户名与密码
+            username: nacos
+            password: nacos
+
+        #熔断规则
+        degrade:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            dataId: ${spring.application.name}-degrade-rules
+            groupId: SAMPLE_GROUP
+            rule-type: degrade #代表熔断
+            username: nacos
+            password: nacos
+
+
     nacos:
-      #Nacos\u6CE8\u518C
+      #Nacos通信地址
       discovery:
         server-addr: localhost:8848
         username: nacos
         password: nacos
+  jackson:
+    default-property-inclusion: non_null
 
 
 
 management:
   endpoints:
-    #\u5C06\u6240\u6709\u53EF\u7528\u7684\u76D1\u63A7\u6307\u6807\u9879\u5BF9\u5916\u66B4\u9732
+    #将所有可用的监控指标项对外暴露
     web:
-      exposure: #\u53EF\u4EE5\u8BBF\u95EE /actuator/sentinel\u8FDB\u884C\u67E5\u770BSentinel\u76D1\u63A7\u9879
+      exposure: #可以访问 /actuator/sentinel进行查看Sentinel监控项
         include: '*'
 
+logging:
+  level:
+    root: info #开启 debug 是学习需要，生产改为 info 即可
