@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="sentinel" />
+        <module name="sleuth-c-service" />
+        <module name="my-nacos" />
+        <module name="warehouse-service" />
+        <module name="sleuth-a-service" />
+        <module name="provider-service" />
+        <module name="consumer-service" />
+        <module name="sleuth-b-service" />
+        <module name="common" />
+        <module name="order-service-dubbo" />
+        <module name="order-service" />
+        <module name="warehouse-service-dubbo" />
+        <module name="gateway" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common" target="8" />
+      <module name="consumer-service" target="1.8" />
+      <module name="gateway" target="1.8" />
+      <module name="my-nacos" target="1.8" />
+      <module name="order-service" target="1.8" />
+      <module name="order-service-dubbo" target="1.8" />
+      <module name="provider-service" target="1.8" />
+      <module name="sentinel" target="1.8" />
+      <module name="sleuth-a-service" target="1.8" />
+      <module name="sleuth-b-service" target="1.8" />
+      <module name="sleuth-c-service" target="1.8" />
+      <module name="warehouse-service" target="1.8" />
+      <module name="warehouse-service-dubbo" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="consumer-service" options="-parameters" />
+      <module name="gateway" options="-parameters" />
+      <module name="my-nacos" options="-parameters" />
+      <module name="order-service" options="-parameters" />
+      <module name="order-service-dubbo" options="-parameters" />
+      <module name="provider-service" options="-parameters" />
+      <module name="sentinel" options="-parameters" />
+      <module name="sleuth-a-service" options="-parameters" />
+      <module name="sleuth-b-service" options="-parameters" />
+      <module name="sleuth-c-service" options="-parameters" />
+      <module name="warehouse-service" options="-parameters" />
+      <module name="warehouse-service-dubbo" options="-parameters" />
+    </option>
+  </component>
+</project>
