@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.nj.shiro.dto.RoleMapper">
+
+    <sql id="base_column_list">
+        role.id ,role
+    </sql>
+
+
+
+    <select id="findRoleByUserId" parameterType="java.lang.Integer"
+            resultType="cn.nj.shiro.entity.Role">
+        select
+            <include refid="base_column_list" />
+        from
+        role, user, user_role ur
+        WHERE
+        role.id=ur.role_id
+        and
+        ur.user_id=USER.id
+
+        and
+        USER.id=#{userId}
+
+    </select>
+</mapper>

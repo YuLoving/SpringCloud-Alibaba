@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.nj.shiro.dto.PermissionMapper">
+
+    <sql id="base_column_list">
+        id
+        , permission,desc
+    </sql>
+
+    <select id="findByRoleId" parameterType="java.util.List"
+            resultType="java.lang.String">
+        SELECT
+            permission
+        FROM
+            permission,
+            role_permission rp
+        WHERE
+            rp.permission_id = permission.id
+        AND rp.role_id IN
+        <foreach collection="roleIds" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+
+    </select>
+
+
+</mapper>
