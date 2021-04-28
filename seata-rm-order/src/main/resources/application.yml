@@ -1,0 +1,91 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: rm-order
+
+  #数据源
+  datasource:
+    #Hikari 连接池配置
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/seata-order?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: root
+      # 最小空闲连接数量
+      minimum-idle: 10
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      # 连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      # 连接池名称
+      pool-name: MyHikariCP
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      # 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  cloud:
+    #nacos注册地址
+    nacos:
+      discovery:
+        username: nacos
+        password: nacos
+        server-addr: localhost:8848
+
+
+#seata配置
+seata:
+  #  开启seata分布式事务
+  enabled: true
+  #  事务服务分组名,与naocs一致
+  tx-service-group: my_test_tx_group
+  #是否启用数据源代理
+  enable-auto-data-source-proxy: true
+  #  事务服务配置
+  service:
+    vgroupMapping:
+      #      事务分组对应集群名称
+      my_test_tx_group: default
+    grouplist:
+      #      Seata-Server服务的IP地址与端口
+      default: 127.0.0.1:8091
+    enable-degrade: false
+    disable-global-transaction: false
+
+  #Nacos配置中心信息
+  config:
+    type: nacos
+    nacos:
+      #seata的配置 我修改放到了dev的namespace  所以读取配置文件时,要配置namespace值
+      namespace: adb9e4ae-43d3-49a9-851c-9c73ab011dd1
+      server-addr: localhost:8848
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+
+  # Nacos注册中心信息
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: localhost:8848
+      group: SEATA_GROUP
+      namespace:
+      username: nacos
+      password: nacos
+      cluster: default
+
+
+mybatis-plus:
+  type-aliases-package: cn.nj.seatarmorder.entity
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+

@@ -1,0 +1,91 @@
+
+server:
+  port: 8086
+
+spring:
+  application:
+    name: tm-mall
+
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/seata-mall?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: root
+      # \u6700\u5C0F\u7A7A\u95F2\u8FDE\u63A5\u6570\u91CF
+      minimum-idle: 10
+      # \u7A7A\u95F2\u8FDE\u63A5\u5B58\u6D3B\u6700\u5927\u65F6\u95F4\uFF0C\u9ED8\u8BA4600000\uFF0810\u5206\u949F\uFF09
+      idle-timeout: 180000
+      # \u8FDE\u63A5\u6C60\u6700\u5927\u8FDE\u63A5\u6570\uFF0C\u9ED8\u8BA4\u662F10
+      maximum-pool-size: 10
+      # \u6B64\u5C5E\u6027\u63A7\u5236\u4ECE\u6C60\u8FD4\u56DE\u7684\u8FDE\u63A5\u7684\u9ED8\u8BA4\u81EA\u52A8\u63D0\u4EA4\u884C\u4E3A,\u9ED8\u8BA4\u503C\uFF1Atrue
+      auto-commit: true
+      # \u8FDE\u63A5\u6C60\u540D\u79F0
+      pool-name: MyHikariCP
+      # \u6B64\u5C5E\u6027\u63A7\u5236\u6C60\u4E2D\u8FDE\u63A5\u7684\u6700\u957F\u751F\u547D\u5468\u671F\uFF0C\u503C0\u8868\u793A\u65E0\u9650\u751F\u547D\u5468\u671F\uFF0C\u9ED8\u8BA41800000\u537330\u5206\u949F
+      max-lifetime: 1800000
+      # \u6570\u636E\u5E93\u8FDE\u63A5\u8D85\u65F6\u65F6\u95F4,\u9ED8\u8BA430\u79D2\uFF0C\u537330000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+
+  cloud:
+    #nacos\u6CE8\u518C\u5730\u5740
+    nacos:
+      discovery:
+        username: nacos
+        password: nacos
+        server-addr: localhost:8848
+
+
+seata:
+  #  \u5F00\u542Fseata\u5206\u5E03\u5F0F\u4E8B\u52A1
+  enabled: true
+  #  \u4E8B\u52A1\u670D\u52A1\u5206\u7EC4\u540D,\u4E0Enaocs\u4E00\u81F4
+  tx-service-group:  my_test_tx_group
+  #\u662F\u5426\u542F\u7528\u6570\u636E\u6E90\u4EE3\u7406
+  enable-auto-data-source-proxy: true
+  #  \u4E8B\u52A1\u670D\u52A1\u914D\u7F6E
+  service:
+    vgroupMapping:
+      #      \u4E8B\u52A1\u5206\u7EC4\u5BF9\u5E94\u96C6\u7FA4\u540D\u79F0
+      my_test_tx_group: default
+    grouplist:
+      #      Seata-Server\u670D\u52A1\u7684IP\u5730\u5740\u4E0E\u7AEF\u53E3
+      default: 127.0.0.1:8091
+    enable-degrade: false
+    disable-global-transaction: false
+
+  config:
+    #Nacos\u914D\u7F6E\u4E2D\u5FC3\u4FE1\u606F
+    nacos:
+      #seata\u7684\u914D\u7F6E \u6211\u4FEE\u6539\u653E\u5230\u4E86dev\u7684namespace  \u6240\u4EE5\u8BFB\u53D6\u914D\u7F6E\u6587\u4EF6\u65F6,\u8981\u914D\u7F6Enamespace\u503C
+      namespace: adb9e4ae-43d3-49a9-851c-9c73ab011dd1
+      server-addr: localhost:8848
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+
+  # Nacos\u6CE8\u518C\u4E2D\u5FC3\u4FE1\u606F
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: localhost:8848
+      group: SEATA_GROUP
+      namespace:
+      username: nacos
+      password: nacos
+      cluster: default
+
+mybatis-plus:
+  type-aliases-package: cn.nj.seatatmmall.entity
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+
+
+
