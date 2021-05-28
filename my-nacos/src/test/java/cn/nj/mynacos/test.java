@@ -9,11 +9,5 @@ public class test {
 
     public static void main(String[] args) {
 
-
-
-        long timestamp = System.currentTimeMillis() / 1000;
-        System.out.println(timestamp);
-        String s = String.valueOf(timestamp);
-        System.out.println(s);
     }
 }

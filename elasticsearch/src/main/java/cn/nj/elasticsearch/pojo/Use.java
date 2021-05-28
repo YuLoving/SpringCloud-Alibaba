@@ -20,7 +20,16 @@ public class Use {
 
     private LocalDateTime dateTime=LocalDateTime.now();
 
+    public Use(Long userId, String name, Integer age) {
+        this.userId = userId;
+        this.name = name;
+        this.age = age;
+    }
 
+    public Use(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
 
     public Long getUserId() {
         return userId;

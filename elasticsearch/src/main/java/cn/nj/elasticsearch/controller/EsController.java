@@ -33,6 +33,49 @@ public class EsController {
         esManager.createDocumentAsync(INDEX,use.toString());
     }
 
+    @GetMapping("index/get")
+    public  String  get(String id){
+        return esManager.getDocument(INDEX,id);
+    }
 
 
+    @GetMapping("index/get/async")
+    public  void   getAsync(String id){
+         esManager.getDocumentAsync(INDEX,id);
+    }
+
+
+    @GetMapping("index/exist")
+    public  boolean  exist(String id){
+        return esManager.existDocument(INDEX,id);
+    }
+
+    @GetMapping("index/exist/async")
+    public  void   existAsync(String id){
+         esManager.existDocumentAsync(INDEX,id);
+    }
+
+
+    @GetMapping("index/delete")
+    public  void   delete(String id){
+        esManager.deleteDocument(INDEX,id);
+    }
+
+
+    @GetMapping("index/delete/async")
+    public  void   deleteAsync(String id){
+        esManager.deleteDocumentAsync(INDEX,id);
+    }
+
+
+    @GetMapping("index/update")
+    public  void   update(String  id){
+        esManager.updateDocument(INDEX,id);
+    }
+
+
+    @GetMapping("index/update/async")
+    public  void   updateAsync(String  id){
+        esManager.updateDocumentAsync(INDEX,id);
+    }
 }
