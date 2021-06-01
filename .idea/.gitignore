@@ -1,37 +1,58 @@
-# Default ignored files
-/shelf/
-/workspace.xml
-# Datasource local storage ignored files
-/../../../:\SpringCloud Alibaba\.idea/dataSources/
-/dataSources.local.xml
-# Editor-based HTTP Client requests
-/httpRequests/
-
-target/
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
+/target/
+/.settings/
+/.classpath
+/.project
+/bin/
+/logs/
+/test-output/
 # Compiled class file
 *.class
 
 # Log file
 *.log
 
-### Gradle Files ###
-.gradle
-/build/
-!gradle/wrapper/gradle-wrapper.jar
+# BlueJ files
+*.ctxt
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# IDE config
+.idea/
 *.iml
-*.ipr
-/out/
+.metadata
+.recommenders
+RemoteSystemsTempFiles
+Servers
+.settings/
+.classpath
+.project
+.git
 
+# Build tools
+target/
+.gradle/
+out/
+build/
+
+# JRebel config
+rebel.xml
+rebel-remote.xml
+
+# others
+tdbg_*
+*scratches*
+template
+returnImport
+returnFail
+**/template
+**/returnImport
+**/returnFail
+arthas-output
+**/adjustmentFileBackup
+**/adjustmentFileRead
+adjustmentFileBackup
+adjustmentFileRead

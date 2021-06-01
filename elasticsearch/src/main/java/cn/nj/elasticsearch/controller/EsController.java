@@ -3,10 +3,9 @@ package cn.nj.elasticsearch.controller;
 import cn.nj.elasticsearch.manager.EsManager;
 import cn.nj.elasticsearch.pojo.Use;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author ：zty
@@ -78,4 +77,34 @@ public class EsController {
     public  void   updateAsync(String  id){
         esManager.updateDocumentAsync(INDEX,id);
     }
+
+
+    @GetMapping("index/termVector")
+    public  String   termVector(String  id,String field){
+        return esManager.termVector(INDEX,id,field);
+    }
+
+
+
+    @GetMapping("index/bulk/put")
+    public void bulkCreate(@RequestBody List<Use> list){
+        esManager.bulkCreateIndex(INDEX,list);
+    }
+
+    @GetMapping("index/bulkProcessor/put")
+    public void bulkProcessorCreate(@RequestBody List<Use> list){
+        esManager.bulkProcessor(INDEX,list);
+    }
+
+    @GetMapping("index/multiGet")
+    public String multiGet(@RequestBody  List<String> ids){
+        return esManager.multiGet(INDEX, ids);
+    }
+
+    @GetMapping("index/multiGet/async")
+    public void multiGetAsync(@RequestBody  List<String> ids){
+         esManager.multiGetAsync(INDEX, ids);
+    }
+
+
 }
