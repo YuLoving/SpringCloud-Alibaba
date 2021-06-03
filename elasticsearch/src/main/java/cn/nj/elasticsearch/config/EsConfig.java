@@ -21,9 +21,8 @@ public class EsConfig {
     public RestHighLevelClient initEs() {
         log.info("############elasticsearch  init########################");
         //利用RestClient构建ES集群地址
-        RestClientBuilder builder = RestClient.builder(new HttpHost("10.177.236.216", 19200, "http"),
-                new HttpHost("10.177.236.217", 19200, "http"),
-                new HttpHost("10.177.236.218", 19200, "http")
+        RestClientBuilder builder = RestClient.builder(new HttpHost("127.0.0.1", 9200, "http")
+
         );
         return new RestHighLevelClient(builder);
 

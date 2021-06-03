@@ -106,5 +106,8 @@ public class EsController {
          esManager.multiGetAsync(INDEX, ids);
     }
 
-
+    @GetMapping("reindex")
+    public void reindex(String toIndex){
+        esManager.reIndex(INDEX, toIndex);
+    }
 }

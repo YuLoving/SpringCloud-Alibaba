@@ -20,7 +20,10 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.core.TermVectorsRequest;
 import org.elasticsearch.client.core.TermVectorsResponse;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.ReindexRequest;
 import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -595,6 +598,65 @@ public class EsManager {
         //异步去请求
         restHighLevelClient.mgetAsync(multiGetRequest,RequestOptions.DEFAULT,listener);
     }
+
+
+    /**
+     * 从fromIndex 复制对应的文档到toIndex索引中
+     * @param fromIndex  源索引
+     * @param toIndex  目标索引
+     */
+    public void reIndex(String fromIndex,String toIndex){
+
+        //构建reIndex请求
+        ReindexRequest reindexRequest = new ReindexRequest();
+        //添加要复制的索引列表
+        reindexRequest.setSourceIndices(fromIndex);
+        //添加目标索引
+        reindexRequest.setDestIndex(toIndex);
+
+        //进行构建请求
+        try {
+            BulkByScrollResponse bulkByScrollResponse = restHighLevelClient.reindex(reindexRequest, RequestOptions.DEFAULT);
+            //解析bulkByScrollResponse
+            logger.info("初步响应值结果:{}",JSON.toJSONString(bulkByScrollResponse));
+            if(null==bulkByScrollResponse){
+                logger.error("bulkByScrollResponse is null");
+            }
+            logger.info("总耗时:{}",bulkByScrollResponse.getTook().getMillis());
+            logger.info("请求是否超时:{}",bulkByScrollResponse.isTimedOut());
+            logger.info("获取已处理的文档总数:{}",bulkByScrollResponse.getTotal());
+            logger.info("已更新的文档总数:{}",bulkByScrollResponse.getUpdated());
+            logger.info("已创建的文档总数:{}",bulkByScrollResponse.getCreated());
+            logger.info("已删除的文档总数:{}",bulkByScrollResponse.getDeleted());
+            logger.info("已执行的批次数:{}",bulkByScrollResponse.getBatches());
+            logger.info("跳过的文档数:{}",bulkByScrollResponse.getNoops());
+            logger.info("版本冲突数:{}",bulkByScrollResponse.getVersionConflicts());
+            logger.info("重试批量索引操作的次数:{}",bulkByScrollResponse.getBulkRetries());
+            logger.info("重试搜索操作的次数:{}",bulkByScrollResponse.getSearchRetries());
+            logger.info("请求阻塞的总时间,不包括当前处于休眠状态的限制时间:{}",bulkByScrollResponse.getStatus().getThrottled());
+            logger.info("查询失败数量:{}",bulkByScrollResponse.getSearchFailures().size());
+            logger.info("查询操作失败数量:{}",bulkByScrollResponse.getBulkFailures().size());
+
+        } catch (IOException e) {
+            logger.error("ReIndex失败");
+            e.printStackTrace();
+
+        }
+    }
+
+  //##############################################search 搜索#############################################################
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
