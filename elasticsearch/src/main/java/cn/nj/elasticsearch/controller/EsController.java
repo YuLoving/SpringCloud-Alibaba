@@ -5,7 +5,9 @@ import cn.nj.elasticsearch.pojo.Use;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：zty
@@ -109,5 +111,25 @@ public class EsController {
     @GetMapping("reindex")
     public void reindex(String toIndex){
         esManager.reIndex(INDEX, toIndex);
+    }
+
+
+    @GetMapping("search")
+    public String searchAll(String field, String value ){
+        return  esManager.search(field,value);
+    }
+
+
+
+    @GetMapping("searchScroll")
+    public void searchScroll(int size,String field, int value ){
+          esManager.scrollSearch(INDEX,size,field,value);
+    }
+
+
+    @GetMapping("multiSearch")
+    public String multiSearch(@RequestBody  List<String> names){
+
+      return   esManager.multiSearch(INDEX,names);
     }
 }
