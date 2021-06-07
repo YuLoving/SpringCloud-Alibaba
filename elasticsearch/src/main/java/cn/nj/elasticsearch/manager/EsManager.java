@@ -12,10 +12,14 @@ import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.fieldcaps.FieldCapabilities;
+import org.elasticsearch.action.fieldcaps.FieldCapabilitiesRequest;
+import org.elasticsearch.action.fieldcaps.FieldCapabilitiesResponse;
 import org.elasticsearch.action.get.*;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.*;
+import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -42,10 +46,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -754,17 +755,18 @@ public class EsManager {
 
     /**
      * 滚动搜索
-     * @param indexName  文档名称
-     * @param size  大小
+     *
+     * @param indexName 文档名称
+     * @param size      大小
      */
-    public void  scrollSearch(String indexName, int size,String field,int value) {
+    public void scrollSearch(String indexName, int size, String field, int value) {
 
         //构建searchRequest
         SearchRequest searchRequest = new SearchRequest(indexName);
 
         //构建searchRequest的依赖 searchSourceBuilder
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        sourceBuilder.query(QueryBuilders.matchQuery(field,value));
+        sourceBuilder.query(QueryBuilders.matchQuery(field, value));
 
         //设置检索多少结果
         sourceBuilder.size(size);
@@ -780,10 +782,10 @@ public class EsManager {
             //读取返回的滚动ID 该ID指向保持活动状态的搜索上下文  并在后续搜索滚动调用中被需要
             String scrollId = searchResponse.getScrollId();
 
-            logger.info("first scrollId is:{}",scrollId);
+            logger.info("first scrollId is:{}", scrollId);
             //检索第一批结果
             SearchHits hits = searchResponse.getHits();
-            while (null !=hits && ArrayUtils.isNotEmpty(hits.getHits())){
+            while (null != hits && ArrayUtils.isNotEmpty(hits.getHits())) {
                 //设置滚动标识符
                 SearchScrollRequest searchScrollRequest = new SearchScrollRequest(scrollId);
                 searchScrollRequest.scroll(TimeValue.timeValueSeconds(30));
@@ -792,10 +794,10 @@ public class EsManager {
                 //读取新的滚动ID  该ID指向保持活动状态的搜索上下文  并在后续搜索滚动中被调用
                 scrollId = response.getScrollId();
                 //检索的另一批搜索结果
-                hits= response.getHits();
+                hits = response.getHits();
 
-                logger.info("next scrollId is:{}",scrollId);
-                logger.info("hits is:{}",JSON.toJSONString(hits));
+                logger.info("next scrollId is:{}", scrollId);
+                logger.info("hits is:{}", JSON.toJSONString(hits));
             }
 
 
@@ -808,52 +810,53 @@ public class EsManager {
 
     /**
      * 指定索引 进行批量的查询
+     *
      * @param indexName 索引名称
-     * @return  值
+     * @return 值
      */
-    public String multiSearch(String indexName,List<String> names){
+    public String multiSearch(String indexName, List<String> names) {
 
         //构建批量查询请求
         MultiSearchRequest multiSearchRequest = new MultiSearchRequest();
 
         //遍历map
-        names.forEach(a->{
+        names.forEach(a -> {
             //构建普通查询请求
             SearchRequest searchRequest = new SearchRequest(indexName);
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-            sourceBuilder.query(QueryBuilders.matchQuery("name",a));
+            sourceBuilder.query(QueryBuilders.matchQuery("name", a));
             searchRequest.source(sourceBuilder);
             //将每一个单个请求添加到批量请求中
             multiSearchRequest.add(searchRequest);
         });
-       List<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         try {
             MultiSearchResponse multiSearchResponse = restHighLevelClient.msearch(multiSearchRequest, RequestOptions.DEFAULT);
-            logger.info("返回结果:{}",JSON.toJSONString(multiSearchResponse));
+            logger.info("返回结果:{}", JSON.toJSONString(multiSearchResponse));
             //获取返回结果集合
             MultiSearchResponse.Item[] items = multiSearchResponse.getResponses();
 
-            if(ArrayUtils.isEmpty(items)){
+            if (ArrayUtils.isEmpty(items)) {
                 logger.info("items  is   null ");
                 return "null";
             }
 
-            for (MultiSearchResponse.Item item:items ){
+            for (MultiSearchResponse.Item item : items) {
 
                 Exception failure = item.getFailure();
-                if(null!=failure){
-                    logger.info("Exception is:{}",failure.toString());
+                if (null != failure) {
+                    logger.info("Exception is:{}", failure.toString());
                 }
                 SearchResponse response = item.getResponse();
                 SearchHits hits = response.getHits();
-                if(hits.getTotalHits().value<=0){
+                if (hits.getTotalHits().value <= 0) {
                     logger.info("hits.getTotalHits().value is 0");
                     continue;
                 }
                 SearchHit[] searchHits = hits.getHits();
-                for (SearchHit searchHit:searchHits) {
-                    if(StringUtils.isNotBlank(searchHit.getSourceAsString())){
-                        logger.info("值:{}",searchHit.getSourceAsString());
+                for (SearchHit searchHit : searchHits) {
+                    if (StringUtils.isNotBlank(searchHit.getSourceAsString())) {
+                        logger.info("值:{}", searchHit.getSourceAsString());
                         list.add(searchHit.getSourceAsString());
                     }
                 }
@@ -866,6 +869,48 @@ public class EsManager {
         return JSON.toJSONString(list);
 
     }
+
+    /**
+     * 跨索引字段搜索
+     *
+     * @param field  字段
+     * @param indexs 索引列表
+     * @return 结果
+     */
+    public void fieldCaps(String field, List<String> indexs) {
+        String[] indices = new String[indexs.size()];
+        FieldCapabilitiesRequest request = new FieldCapabilitiesRequest().fields(field).indices(indices);
+        //配置可选参数 IndicesOptions  解析不可用的索引及展开通配符表达式
+        request.indicesOptions(IndicesOptions.lenientExpandOpen());
+
+        try {
+            FieldCapabilitiesResponse response = restHighLevelClient.fieldCaps(request, RequestOptions.DEFAULT);
+            logger.info("查询结果:{}",JSON.toJSONString(response));
+            //获取字段中可能含有的类型的映射
+            Map<String, FieldCapabilities> responseField = response.getField(field);
+
+            //取出所有的key
+            //Set<String> set = responseField.keySet();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    //#########################################################索引操作##########################################################
+
+
+
+
+
+
+
+
+
+
 
 
 

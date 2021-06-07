@@ -5,6 +5,7 @@ import cn.nj.elasticsearch.pojo.Use;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,5 +132,11 @@ public class EsController {
     public String multiSearch(@RequestBody  List<String> names){
 
       return   esManager.multiSearch(INDEX,names);
+    }
+
+
+    @GetMapping("fieldCaps")
+    public void fieldCaps(String field){
+        esManager.fieldCaps(field, Arrays.asList(INDEX,"my_to_index"));
     }
 }
