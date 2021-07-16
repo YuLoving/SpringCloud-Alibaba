@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: provider-service #Ó¦ÓÃ/Î¢·şÎñÃû×Ö
+    name: provider-service #åº”ç”¨/å¾®æœåŠ¡åå­—
   cloud:
     nacos:
       discovery:

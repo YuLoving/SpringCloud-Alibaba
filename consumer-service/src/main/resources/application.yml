@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: consumer-service #Ó¦ÓÃ/Î¢·şÎñÃû×Ö
+    name: consumer-service #åº”ç”¨/å¾®æœåŠ¡åå­—
   cloud:
     nacos:
       discovery:

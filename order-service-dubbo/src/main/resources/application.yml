@@ -5,17 +5,17 @@ spring:
     name: order-service-dubbo
   cloud:
     nacos:
-      ##nacos×¢²áµØÖ·
+      ##nacosæ³¨å†Œåœ°å€
       discovery:
         server-addr: localhost:8848
         password: nacos
         username: nacos
 
 
-#Dubbo Óë NacosÍ¨ĞÅÑ¡Ïî
+#Dubbo ä¸ Nacosé€šä¿¡é€‰é¡¹
 dubbo:
   application:
     name: warehouse-dubbo
   registry:
     address: nacos://localhost:8848
-  #ÒòÎª order-service ÊÇÏû·ÑÕß£¬Òò´Ë²»ĞèÒª×¨ÃÅÅäÖÃ¶Ë¿ÚÓë base-packagesÑ¡Ïî¡£
+  #å› ä¸º order-service æ˜¯æ¶ˆè´¹è€…ï¼Œå› æ­¤ä¸éœ€è¦ä¸“é—¨é…ç½®ç«¯å£ä¸ base-packagesé€‰é¡¹ã€‚

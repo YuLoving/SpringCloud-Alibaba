@@ -3,25 +3,25 @@ server:
 
 spring:
   application:
-    name: warehouse-service-dubbo #Î¢·şÎñid
+    name: warehouse-service-dubbo #å¾®æœåŠ¡id
   cloud:
     nacos:
-      #nacos×¢²áµØÖ·
+      #nacosæ³¨å†Œåœ°å€
       discovery:
         server-addr: localhost:8848
         username: nacos
         password: nacos
 
 
-#dubboÓënacosµÄÍ¨ĞÅÅäÖÃ
+#dubboä¸nacosçš„é€šä¿¡é…ç½®
 dubbo:
   application:
-    name: warehouse-dubbo #providerÔÚNacosÖĞµÄÓ¦ÓÃid
-  registry: #ProviderÓëNacosÍ¨ĞÅµØÖ·£¬Óëspring.cloud.nacosµØÖ·Ò»ÖÂ
+    name: warehouse-dubbo #provideråœ¨Nacosä¸­çš„åº”ç”¨id
+  registry: #Providerä¸Nacosé€šä¿¡åœ°å€ï¼Œä¸spring.cloud.nacosåœ°å€ä¸€è‡´
     address: nacos://localhost:8848
   protocol:
-    name: dubbo  #Í¨ĞÅĞ­ÒéÃû
-    port: 20880  #ÅäÖÃÍ¨ĞÅ¶Ë¿Ú£¬Ä¬ÈÏÎª20880
-  #´ú±íÔÚ Dubbo ÈİÆ÷Æô¶¯Ê±×Ô¶¯É¨Ãè cn.nj.warehouseservicedubbo °üÏÂµÄ½Ó¿ÚÓëÊµÏÖÀà£¬²¢½«ÕâĞ©½Ó¿ÚĞÅÏ¢ÔÚNacos ½øĞĞµÇ¼Ç£¬Òò´Ë Dubbo ¶ÔÍâ±©Â¶µÄ½Ó¿Ú±ØĞë·ÅÔÚ¸Ã°üÏÂ¡£
+    name: dubbo  #é€šä¿¡åè®®å
+    port: 20880  #é…ç½®é€šä¿¡ç«¯å£ï¼Œé»˜è®¤ä¸º20880
+  #ä»£è¡¨åœ¨ Dubbo å®¹å™¨å¯åŠ¨æ—¶è‡ªåŠ¨æ‰«æ cn.nj.warehouseservicedubbo åŒ…ä¸‹çš„æ¥å£ä¸å®ç°ç±»ï¼Œå¹¶å°†è¿™äº›æ¥å£ä¿¡æ¯åœ¨Nacos è¿›è¡Œç™»è®°ï¼Œå› æ­¤ Dubbo å¯¹å¤–æš´éœ²çš„æ¥å£å¿…é¡»æ”¾åœ¨è¯¥åŒ…ä¸‹ã€‚
   scan:
     base-packages: cn.nj.warehouseservicedubbo.serviceImpl

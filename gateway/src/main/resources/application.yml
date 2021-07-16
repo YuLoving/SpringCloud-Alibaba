@@ -2,48 +2,48 @@ server:
   port: 8092
 spring:
   application:
-    name: gateway #ÅäÖÃÎ¢·şÎñid
+    name: gateway #é…ç½®å¾®æœåŠ¡id
   cloud:
     nacos:
-      #nacos ×¢²áÖĞĞÄ
+      #nacos æ³¨å†Œä¸­å¿ƒ
       discovery:
         username: nacos
         password: nacos
         server-addr: localhost:8848
 
-    #ÈÃgatewayÍ¨¹ınacosÊµÏÖ×Ô¶¯Â·ÓÉ×ª·¢
+    #è®©gatewayé€šè¿‡nacoså®ç°è‡ªåŠ¨è·¯ç”±è½¬å‘
     gateway:
       discovery:
         locator:
-          #locator.enabledÊÇ×Ô¶¯¸ù¾İURL¹æÔòÊµÏÖÂ·ÓÉ×ª·¢(true)     ÕâÊÇÒ»¸ö×Ô¶¯Ïî£¬ÔÊĞí Gateway ×Ô¶¯ÊµÏÖºó¶ËÎ¢·şÎñÂ·ÓÉ×ª·¢£¬ Gateway ¹¤³ÌÆô¶¯ºó£¬ÔÚä¯ÀÀÆ÷µØÖ·À¸°´ÏÂÃæ¸ñÊ½·ÃÎÊºó¶Ë·şÎñ¡£ http://Íø¹ØIP:¶Ë¿Ú/Î¢·şÎñid/URI
-          enabled: false  #²»ÔÙĞèÒªGateway×Ô¶¯Â·ÓÉ×ª·¢
-      #Â·ÓÉ¹æÔòÅäÖÃ
+          #locator.enabledæ˜¯è‡ªåŠ¨æ ¹æ®URLè§„åˆ™å®ç°è·¯ç”±è½¬å‘(true)     è¿™æ˜¯ä¸€ä¸ªè‡ªåŠ¨é¡¹ï¼Œå…è®¸ Gateway è‡ªåŠ¨å®ç°åç«¯å¾®æœåŠ¡è·¯ç”±è½¬å‘ï¼Œ Gateway å·¥ç¨‹å¯åŠ¨åï¼Œåœ¨æµè§ˆå™¨åœ°å€æ æŒ‰ä¸‹é¢æ ¼å¼è®¿é—®åç«¯æœåŠ¡ã€‚ http://ç½‘å…³IP:ç«¯å£/å¾®æœåŠ¡id/URI
+          enabled: false  #ä¸å†éœ€è¦Gatewayè‡ªåŠ¨è·¯ç”±è½¬å‘
+      #è·¯ç”±è§„åˆ™é…ç½®
       routes:
-        #µÚÒ»¸öÂ·ÓÉÅäÖÃ£¬service-aÂ·ÓÉ¹æÔò
+        #ç¬¬ä¸€ä¸ªè·¯ç”±é…ç½®ï¼Œservice-aè·¯ç”±è§„åˆ™
         - id: service_a_route
-            #lb¿ªÍ·´ú±í»ùÓÚgatewayµÄ¸ºÔØ¾ùºâ²ßÂÔÑ¡ÔñÊµÀı
+            #lbå¼€å¤´ä»£è¡¨åŸºäºgatewayçš„è´Ÿè½½å‡è¡¡ç­–ç•¥é€‰æ‹©å®ä¾‹
             uri: lb://service-a
-            #Î½´ÊÅäÖÃ
+            #è°“è¯é…ç½®
             predicates:
-              #PathÂ·¾¶Î½´Ê£¬´ú±íÓÃ»§¶ËURIÈç¹ûÒÔ/a¿ªÍ·±ã»á×ª·¢µ½service-aÊµÀı
+              #Pathè·¯å¾„è°“è¯ï¼Œä»£è¡¨ç”¨æˆ·ç«¯URIå¦‚æœä»¥/aå¼€å¤´ä¾¿ä¼šè½¬å‘åˆ°service-aå®ä¾‹
               - path=/a/**
-              #AfterÉúĞ§Ê±¼äÎ½´Ê£¬2020Äê10ÔÂ15ÈÕºó¸ÃÂ·ÓÉ²ÅÄÜÔÚÍø¹Ø¶ÔÍâ±©Â¶
+              #Afterç”Ÿæ•ˆæ—¶é—´è°“è¯ï¼Œ2020å¹´10æœˆ15æ—¥åè¯¥è·¯ç”±æ‰èƒ½åœ¨ç½‘å…³å¯¹å¤–æš´éœ²
               - After=2020-10-05T00:00:00.000+08:00[Asia/Shanghai]
-            #¹ıÂËÆ÷ÅäÖÃ
+            #è¿‡æ»¤å™¨é…ç½®
             filters:
-              #ºöÂÔµôµÚÒ»²ãÇ°×º½øĞĞ×ª·¢
+              #å¿½ç•¥æ‰ç¬¬ä¸€å±‚å‰ç¼€è¿›è¡Œè½¬å‘
               - StripPrefix=1
-              #ÎªÏìÓ¦Í·¸½¼ÓX-Response=Blue  key=X-Response-Foo£¬Value=Bar¡£
+              #ä¸ºå“åº”å¤´é™„åŠ X-Response=Blue  key=X-Response-Fooï¼ŒValue=Barã€‚
               - AddResponseHeader=X-Response,Blue
 
 
-        #µÚ¶ş¸öÂ·ÓÉÅäÖÃ£¬service-bÂ·ÓÉ¹æÔò
+        #ç¬¬äºŒä¸ªè·¯ç”±é…ç½®ï¼Œservice-bè·¯ç”±è§„åˆ™
         - id: service_b_route
-           uri: lb://service-b
-           predicates:
-             - path=/b/**
-           filters:
-             - StripPrefix=1
+            uri: lb://service-b
+            predicates:
+              - path=/b/**
+            filters:
+              - StripPrefix=1
 
 
 
@@ -52,6 +52,6 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'  #¶ÔÍâ±©Â¶actuatorËùÓĞ¼à¿ØÖ¸±ê£¬±ãÓÚ¼à¿ØÏµÍ³ÊÕ¼¯¸ú×Ù
+        include: '*'  #å¯¹å¤–æš´éœ²actuatoræ‰€æœ‰ç›‘æ§æŒ‡æ ‡ï¼Œä¾¿äºç›‘æ§ç³»ç»Ÿæ”¶é›†è·Ÿè¸ª
 
 

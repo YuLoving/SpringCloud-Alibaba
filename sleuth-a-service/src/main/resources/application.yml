@@ -11,20 +11,20 @@ spring:
     name: a-service #a-service/b-service/c-service
 
   sleuth:
-    #²ÉÑùÆ÷
+    #é‡‡æ ·å™¨
     sampler:
-      #²ÉÑùÂÊ£¬²ÉÑùÂÊÊÇ²É¼¯TraceµÄ±ÈÂÊ£¬Ä¬ÈÏ0.1
+      #é‡‡æ ·ç‡ï¼Œé‡‡æ ·ç‡æ˜¯é‡‡é›†Traceçš„æ¯”ç‡ï¼Œé»˜è®¤0.1
       probability: 1.0
-      #Ã¿ÃëÊı¾İ²É¼¯Á¿£¬×î¶ànÌõ/ÃëTrace
+      #æ¯ç§’æ•°æ®é‡‡é›†é‡ï¼Œæœ€å¤šnæ¡/ç§’Trace
       rate: 10000
   zipkin:
-    #ÉèÖÃzipkin·şÎñ¶ËµØÖ·
+    #è®¾ç½®zipkinæœåŠ¡ç«¯åœ°å€
     base-url: http://localhost:9411
 
 
 
 logging:
   level:
-    root: debug #ÎªÑİÊ¾ĞèÒª£¬¿ªÆôdebug¼¶±ğÈÕÖ¾
+    root: debug #ä¸ºæ¼”ç¤ºéœ€è¦ï¼Œå¼€å¯debugçº§åˆ«æ—¥å¿—
 
 
